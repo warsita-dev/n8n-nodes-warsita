@@ -1,0 +1,57 @@
+{
+	"name": "n8n-nodes-warsita",
+	"version": "0.1.0",
+	"description": "n8n nodes for Warsita: send WhatsApp messages, read contacts and groups, and start workflows from WhatsApp events.",
+	"license": "MIT",
+	"homepage": "https://warsita.com/docs/n8n",
+	"keywords": [
+		"n8n-community-node-package",
+		"whatsapp",
+		"warsita"
+	],
+	"author": {
+		"name": "Warsita",
+		"email": "hello@warsita.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/warsita-dev/n8n-nodes-warsita.git"
+	},
+	"bugs": {
+		"url": "https://github.com/warsita-dev/n8n-nodes-warsita/issues"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease",
+		"test": "node --test test/nodes.test.mjs"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/WarsitaApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Warsita/Warsita.node.js",
+			"dist/nodes/WarsitaTrigger/WarsitaTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "0.54.3",
+		"eslint": "9.39.4",
+		"prettier": "3.8.3",
+		"release-it": "20.2.0",
+		"typescript": "5.9.3"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}
