@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-warsita",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "n8n nodes for Warsita: send WhatsApp messages, read contacts and groups, and start workflows from WhatsApp events.",
 	"license": "MIT",
 	"homepage": "https://warsita.com/docs/n8n",
