@@ -129,6 +129,32 @@ test('a personal access token adds the session: in the body for POST, in the que
 	await assert.rejects(new Warsita().execute.call(missing), /Session ID/);
 });
 
+test('rotate sends without the session, and get needs none', async () => {
+	const credentials = { apiKey: 'wsp_token', sessionId: 'ses_a', baseUrl: 'https://api.warsita.com' };
+	const send = fakeContext({
+		credentials,
+		params: {
+			resource: 'message',
+			operation: 'send',
+			to: '+6281234567890',
+			type: 'text',
+			text: 'Hi',
+			additionalFields: { rotate: true },
+		},
+		responses: [{ data: { id: 'msg_1', from: '+6281100000001' } }],
+	});
+	const [[out]] = await new Warsita().execute.call(send);
+	assert.deepEqual(send.calls[0].body, { to: '+6281234567890', text: 'Hi', rotate: true });
+	assert.equal(out.json.from, '+6281100000001');
+
+	const get = fakeContext({
+		credentials: { apiKey: 'wsp_token', baseUrl: 'https://api.warsita.com' },
+		params: { resource: 'message', operation: 'get', messageId: 'msg_1' },
+	});
+	await new Warsita().execute.call(get);
+	assert.deepEqual(get.calls[0].qs, {});
+});
+
 test('path parameters are escaped', async () => {
 	const ctx = fakeContext({
 		params: { resource: 'group', operation: 'get', groupJid: '120363012345678901@g.us' },

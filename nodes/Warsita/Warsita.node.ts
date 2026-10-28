@@ -174,6 +174,14 @@ const messageFields: INodeProperties[] = [
 				description: 'In a group: who wrote the quoted message',
 			},
 			{
+				displayName: 'Rotate Sender',
+				name: 'rotate',
+				type: 'boolean',
+				default: false,
+				description:
+					"Whether to send from the workspace's sender rotation, the number in rotation that wrote to this person longest ago, instead of the credential's session. Needs a personal access token; people only, without a reply.",
+			},
+			{
 				displayName: 'View Once',
 				name: 'viewOnce',
 				type: 'boolean',
@@ -392,20 +400,20 @@ async function run(this: IExecuteFunctions, i: number): Promise<unknown> {
 	if (resource === 'message') {
 		const id = () => p(param('messageId'));
 		switch (operation) {
-			case 'send':
+			case 'send': {
+				const body = messageBody.call(this, i);
 				return warsitaRequest.call(this, {
 					method: 'POST',
 					path: '/v1/messages',
-					body: messageBody.call(this, i),
+					body,
 					headers: idempotencyKey.call(this, i),
-					scoped: true,
+					// A rotated message names no session: the workspace's rotation picks it.
+					scoped: !body.rotate,
 				});
+			}
 			case 'get':
-				return warsitaRequest.call(this, {
-					method: 'GET',
-					path: `/v1/messages/${id()}`,
-					scoped: true,
-				});
+				// No session needed, so messages sent with rotation are found too.
+				return warsitaRequest.call(this, { method: 'GET', path: `/v1/messages/${id()}` });
 			case 'edit':
 				return warsitaRequest.call(this, {
 					method: 'PATCH',
@@ -525,6 +533,7 @@ function messageBody(this: IExecuteFunctions, i: number): IDataObject {
 		};
 	}
 	if (extra.viewOnce) body.view_once = true;
+	if (extra.rotate) body.rotate = true;
 	return body;
 }
 

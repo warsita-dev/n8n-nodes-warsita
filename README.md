@@ -34,6 +34,8 @@ A session API key is enough for the Warsita node. The **Warsita Trigger needs a 
 
 If **Retry On Fail** runs a Send again in the same execution, Warsita answers with the message it already queued instead of sending it twice.
 
+With a personal access token, **Additional Fields → Rotate Sender** sends from the workspace's [sender rotation](https://warsita.com/docs/messages#sender-rotation) instead of the credential's session: of the numbers with the Rotation setting on, the one that wrote to this person longest ago. The output's `from` is the number it went out from. **Message → Get** needs no session, so it finds these messages too.
+
 ## Warsita Trigger
 
 Pick the events to receive. When the workflow is activated, the trigger points the session's webhook at n8n and keeps its signing secret; when it is deactivated, it turns the webhook off again.
