@@ -31,8 +31,12 @@
 		"test": "node --test test/nodes.test.mjs"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"!dist/**/*.tsbuildinfo"
 	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"n8n": {
 		"n8nNodesApiVersion": 1,
 		"strict": true,
